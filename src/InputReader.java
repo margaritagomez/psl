@@ -9,7 +9,7 @@ public class InputReader {
 		scanner = new Scanner(System.in);
 	}
 	
-	public ArrayList<LCDNumber> readInput() throws Exception {
+	public ArrayList<LCDNumber> readInput () throws Exception {
 		ArrayList<LCDNumber> numberList = new ArrayList<LCDNumber>();
 		String line = scanner.nextLine();
 		while (!line.equals("0,0")) {
