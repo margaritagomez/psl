@@ -19,7 +19,7 @@ public class InputReader {
 			if(size < 1 || size > 10) throw new Exception("Size should be between 1 and 10");
 			int number = Integer.parseInt(parts[1]);
 			if(number < 0) throw new Exception("Number should be positive");
-			numberList.add(new LCDNumber(size, number));
+			numberList.add(new LCDNumber(size, parts[1]));
 			line = scanner.nextLine();
 		}
 		return numberList;

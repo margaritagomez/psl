@@ -3,11 +3,11 @@ public class LCDNumber {
 	
 	private final static String VERTICAL = "|";
 	
-	private final static String HORIZONTAL = "-";
+	private final static String HORIZONTAL = "_";
+	
+	private final static String SPACE = " ";
 	
 	private int sizeN;
-	
-	private int prNumber;
 	
 	private String strNumber;
 	
@@ -15,34 +15,49 @@ public class LCDNumber {
 	
 	private int totalRows;
 	
-	public LCDNumber (int pSizeN, int pPrNumber) {
+	public LCDNumber (int pSizeN, String pStrNumber) {
 		sizeN = pSizeN;
-		prNumber = pPrNumber;
-		strNumber = String.valueOf(prNumber);
+		strNumber = pStrNumber;
 		digits = new LCDDigit [strNumber.length()];
 		totalRows = sizeN * 2 + 3;
 	}
 	
 	public void printNumber () {
 		createDigits();
-		int half = (int) Math.ceil((double)totalRows/2);
+		int half = totalRows/2;
+		String horLine = new String(new char[sizeN]).replace("\0", HORIZONTAL);
+		String horSpace = new String(new char[sizeN]).replace("\0", " ");
 		for (int i=0;i<totalRows;i++) {
-			String line = "";
+			StringBuilder line = new StringBuilder();
 			for (int j=0;j<digits.length;j++) {
-				int currDigit = digits[i].getDigit();
-				boolean [] currDesc = digits[i].getDescription();
+				boolean [] currDesc = digits[j].getDescription();
+				String beg = " ", end = " ", mid = horSpace;
 				if (i==0) {
 					// Si es 0, miro si se necesita top
+					if (currDesc[0]) mid = horLine;
 				} else if (i<half) {
 					// Si es menos de la mitad miro top-right y top-left
+					if (currDesc[5]) beg = VERTICAL;
+					if (currDesc[1]) end = VERTICAL;
 				} else if (i==half) {
 					// Si es la mitad miro mid, top-right y top-left
-				} else if (i>half) {
+					if (currDesc[5]) beg = VERTICAL;
+					if (currDesc[1]) end = VERTICAL;
+					if (currDesc[6]) mid = horLine;
+				} else if (i>half && i<totalRows-1) {
 					//Si es más de la mitad, miro bottom-right y bottom-left
+					if (currDesc[4]) beg = VERTICAL;
+					if (currDesc[2]) end = VERTICAL;
 				} else {
 					//Si es el último, miro bottom, bottom-right y bottom-left
+					if (currDesc[4]) beg = VERTICAL;
+					if (currDesc[2]) end = VERTICAL;
+					if (currDesc[3]) mid = horLine;
 				}
+				String toAdd = join(beg,mid,end);
+				line.append(toAdd);
 			}
+			System.out.println(line.toString());
 		}
 	}
 	
@@ -62,13 +77,13 @@ public class LCDNumber {
 			else if (dig==3)
 				desc = new boolean [] {true, true, true, true, false, false, true};
 			else if (dig==4)
-				desc = new boolean [] {false, true, true, false, true, false, true};
+				desc = new boolean [] {false, true, true, false, false, true, true};
 			else if (dig==5)
 				desc = new boolean [] {true, false, true, true, false, true, true};
 			else if (dig==6)
 				desc = new boolean [] {true, false, true, true, true, true, true};
 			else if (dig==7)
-				desc = new boolean [] {true, true, true, true, false, true, true};
+				desc = new boolean [] {true, true, true, false, false, false, false};
 			else if (dig==8)
 				desc = new boolean [] {true, true, true, true, true, true, true};
 			else
@@ -76,6 +91,15 @@ public class LCDNumber {
 			LCDDigit newDigit = new LCDDigit(dig,desc);
 			digits[i] = newDigit;
 		}
+	}
+	
+	private String join(String beg, String mid, String end) {
+		StringBuilder sb = new StringBuilder ();
+		sb.append(beg);
+		sb.append(mid);
+		sb.append(end);
+		sb.append(SPACE);
+		return sb.toString();
 	}
 
 }
