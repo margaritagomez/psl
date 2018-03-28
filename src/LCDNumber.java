@@ -7,18 +7,21 @@ public class LCDNumber {
 	
 	private final static String SPACE = " ";
 	
+	/**
+	 * Height the displayed digits will have
+	 */
 	private int sizeN;
 	
 	private String strNumber;
 	
-	private LCDDigit [] digits;
+	private boolean [][] mDigits;
 	
 	private int totalRows;
 	
 	public LCDNumber (int pSizeN, String pStrNumber) {
 		sizeN = pSizeN;
 		strNumber = pStrNumber;
-		digits = new LCDDigit [strNumber.length()];
+		mDigits = new boolean [strNumber.length()][7];
 		totalRows = sizeN * 2 + 3;
 	}
 	
@@ -26,12 +29,12 @@ public class LCDNumber {
 		createDigits();
 		int half = totalRows/2;
 		String horLine = new String(new char[sizeN]).replace("\0", HORIZONTAL);
-		String horSpace = new String(new char[sizeN]).replace("\0", " ");
+		String horSpace = new String(new char[sizeN]).replace("\0", SPACE);
 		for (int i=0;i<totalRows;i++) {
 			StringBuilder line = new StringBuilder();
-			for (int j=0;j<digits.length;j++) {
-				boolean [] currDesc = digits[j].getDescription();
-				String beg = " ", end = " ", mid = horSpace;
+			for (int j=0;j<strNumber.length();j++) {
+				boolean [] currDesc = mDigits[j];
+				String beg = SPACE, end = SPACE, mid = horSpace;
 				if (i==0) {
 					// Si es 0, miro si se necesita top
 					if (currDesc[0]) mid = horLine;
@@ -65,7 +68,7 @@ public class LCDNumber {
 	 * 0 Top, 1 top-right, 2 bottom-right, 3 bottom, 4 bottom-left, 5 top-left, 6 middle
 	 */
 	private void createDigits () {
-		for (int i=0;i<digits.length;i++) {
+		for (int i=0;i<strNumber.length();i++) {
 			int dig = Character.getNumericValue(strNumber.charAt(i));
 			boolean [] desc; 
 			if (dig==0)
@@ -88,13 +91,13 @@ public class LCDNumber {
 				desc = new boolean [] {true, true, true, true, true, true, true};
 			else
 				desc = new boolean [] {true, true, true, true, false, true, true};
-			LCDDigit newDigit = new LCDDigit(dig,desc);
-			digits[i] = newDigit;
+			mDigits[i] = desc;
 		}
+		System.out.println(mDigits[2][6]);
 	}
 	
 	private String join(String beg, String mid, String end) {
-		StringBuilder sb = new StringBuilder ();
+		StringBuilder sb = new StringBuilder();
 		sb.append(beg);
 		sb.append(mid);
 		sb.append(end);
