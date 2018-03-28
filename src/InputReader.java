@@ -3,12 +3,23 @@ import java.util.Scanner;
 
 public class InputReader {
 	
+	/**
+	 * Scanner that reads input data.
+	 */
 	private Scanner scanner;
 	
+	/**
+	 * Creates new Scanner.
+	 */
 	public InputReader () {
 		scanner = new Scanner(System.in);
 	}
 	
+	/**
+	 * Creates an ArrayList of objects that include their size and digits to be printed.
+	 * Checks if input has appropiate structure.
+	 * @return ArrayList of LCDNumbers read from input.
+	 */
 	public ArrayList<LCDNumber> readInput () throws Exception {
 		ArrayList<LCDNumber> numberList = new ArrayList<LCDNumber>();
 		String line = scanner.nextLine();
