@@ -1,23 +1,40 @@
 
 public class LCDNumber {
 	
-	private final static String VERTICAL = "|";
+	/**
+	 * Characters used to print numbers
+	 */
+	private final static char VERTICAL = '|';
 	
-	private final static String HORIZONTAL = "_";
+	private final static char HORIZONTAL = '_';
 	
-	private final static String SPACE = " ";
+	private final static char SPACE = ' ';
 	
 	/**
-	 * Height the displayed digits will have
+	 * Given size for the number
 	 */
 	private int sizeN;
 	
+	/**
+	 * Given number
+	 */
 	private String strNumber;
 	
+	/**
+	 * Matrix that describes which segments should be drawn. 
+	 */
 	private boolean [][] mDigits;
 	
+	/**
+	 * Total rows that will be printed
+	 */
 	private int totalRows;
 	
+	/**
+	 * Creates a new LCDNumber 
+	 * @param pSizeN
+	 * @param pStrNumber
+	 */
 	public LCDNumber (int pSizeN, String pStrNumber) {
 		sizeN = pSizeN;
 		strNumber = pStrNumber;
@@ -28,13 +45,14 @@ public class LCDNumber {
 	public void printNumber () {
 		createDigits();
 		int half = totalRows/2;
-		String horLine = new String(new char[sizeN]).replace("\0", HORIZONTAL);
-		String horSpace = new String(new char[sizeN]).replace("\0", SPACE);
+		String horLine = new String(new char[sizeN]).replace("\0", Character.toString(HORIZONTAL));
+		String horSpace = new String(new char[sizeN]).replace("\0", Character.toString(SPACE));
 		for (int i=0;i<totalRows;i++) {
 			StringBuilder line = new StringBuilder();
 			for (int j=0;j<strNumber.length();j++) {
 				boolean [] currDesc = mDigits[j];
-				String beg = SPACE, end = SPACE, mid = horSpace;
+				char beg = SPACE, end = SPACE;
+				String mid = horSpace;
 				if (i==0) {
 					// Si es 0, miro si se necesita top
 					if (currDesc[0]) mid = horLine;
@@ -93,10 +111,9 @@ public class LCDNumber {
 				desc = new boolean [] {true, true, true, true, false, true, true};
 			mDigits[i] = desc;
 		}
-		System.out.println(mDigits[2][6]);
 	}
 	
-	private String join(String beg, String mid, String end) {
+	private String join(char beg, String mid, char end) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(beg);
 		sb.append(mid);
